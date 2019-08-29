@@ -21,6 +21,6 @@ class ConsumeButton{
   void update(double t) {}
 
   void onTapDown() {
-    game.summonFishy();
+
   }
 }

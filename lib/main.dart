@@ -24,19 +24,26 @@ void main() async {
     'button-consume.png',
     'button-journey.png',
     'button-quick.png'
-  ]);
+    ]);
+
+  // What does this do?
+  Flame.audio.disableLog();
+  // Pre load audio
+  Flame.audio.loadAll(<String>[
+  'sfx/bubblebobbl11.wav']);
 
   SharedPreferences storage = await SharedPreferences.getInstance(); 
   // Create the game instance and the app
   FishTankUI gameUI = FishTankUI(); 
   FishTankGame game = FishTankGame(gameUI.state);
+  gameUI.state.game = game; 
   runApp(game.widget); 
 
   runApp(
     MaterialApp(
       title: 'Fish Tank',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.green,
         fontFamily: 'HVD',
       ),
       home: Scaffold(
@@ -59,8 +66,6 @@ void main() async {
       debugShowCheckedModeBanner: false,
     ),
   );
-
-  
 
   // Create gesture reader
   TapGestureRecognizer tapper = TapGestureRecognizer();

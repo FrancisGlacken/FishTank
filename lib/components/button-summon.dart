@@ -24,6 +24,6 @@ class SummonButton {
   void update(double t) {}
 
   void onTapDown() {
-    game.summonFishy();
+
   }
 }

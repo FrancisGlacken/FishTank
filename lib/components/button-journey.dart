@@ -21,7 +21,7 @@ class JourneyButton{
   void update(double t) {}
 
   void onTapDown() {
-    game.summonFishy();
+
   }
 
 }

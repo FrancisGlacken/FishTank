@@ -1,19 +1,17 @@
-import 'package:fish_tank/components/button-consume.dart';
-import 'package:fish_tank/components/button-journey.dart';
 import 'package:flame/game.dart';
 import 'package:flame/flame.dart';
 import 'dart:ui';
-import 'package:fish_tank/components/fish.dart';
+import 'package:fish_tank/components/objects/fish.dart';
 import 'dart:math';
-import 'package:fish_tank/components/cheep-red.dart';
-import 'package:fish_tank/components/cheep-green.dart';
-import 'package:fish_tank/components/cheep-blue.dart';
-import 'package:fish_tank/components/cheep-white.dart';
-import 'package:fish_tank/components/button-summon.dart';
+import 'package:fish_tank/components/objects/cheep-red.dart';
+import 'package:fish_tank/components/objects/cheep-green.dart';
+import 'package:fish_tank/components/objects/cheep-blue.dart';
+import 'package:fish_tank/components/objects/cheep-white.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/gestures.dart';
 import 'package:fish_tank/components/button-feed.dart';
 import 'package:fish_tank/fish_tank_ui.dart';
+import 'package:fish_tank/components/objects/enemy_fish.dart';
 
 
 
@@ -21,57 +19,48 @@ class FishTankGame extends Game {
   final FishTankUIState ui; 
   Size screenSize;
   double tileSize;
-  List<Fish> fishies;
   Random rnd;
-  SummonButton summonButton;
-  FeedButton feedButton;
-  ConsumeButton consumeButton;
-  JourneyButton journeyButton; 
   bool isHandled = false;
   double growRate = 1;  
+  List<Fish> fishies; 
+  List<EnemyFish> evilFishies; 
+  Fish fishy; 
 
   FishTankGame(this.ui) {
-    initialize();
+    initialize(); 
   }
 
   void initialize() async {
-    fishies = List<Fish>();
     rnd = Random();
+    fishies = List<Fish>(); 
+    evilFishies = List<EnemyFish>(); 
     resize(await Flame.util.initialDimensions());
+    summonFishy(); 
 
-    summonButton = SummonButton(this);
-    feedButton = FeedButton(this);
-    consumeButton = ConsumeButton(this); 
-    journeyButton = JourneyButton(this); 
-    summonFishy();
+  }
+
+  void resize(Size size) {
+    screenSize = size;
+    super.resize(size);
+    tileSize = screenSize.width / 9;
   }
 
   void summonFishy() {
-    double x = rnd.nextDouble() * (screenSize.width - tileSize * 2.025);
-    double y = rnd.nextDouble() * (screenSize.height - tileSize * 2.025);
+   double x = rnd.nextDouble() * (screenSize.width - tileSize);
+   double y = rnd.nextDouble() * (screenSize.height - tileSize);
+   fishy = CheepWhite(this, x, y); 
+   fishies.add(fishy); 
+  }
 
-    switch (rnd.nextInt(4)) {
-      case 0:
-        fishies.add(CheepRed(this, x, y));
-        break;
-      case 1:
-        fishies.add(CheepGreen(this, x, y));
-        break;
-      case 2:
-        fishies.add(CheepBlue(this, x, y));
-        break;
-      case 3:
-        fishies.add(CheepWhite(this, x, y));
-        break;
-    }
+  //Implement this
+  void start() {
+
   }
 
   // Attempts to update fish size by calling a if statement in the update method of the fishy
   void growFishy() {
     growRate = growRate * 1.1; 
-    fishies.forEach((Fish fish) {
-      fish.fishSizeMulti = fish.fishSizeMulti * growRate; 
-    }); 
+    fishy.fishSizeMulti = fishy.fishSizeMulti * growRate; 
   }
 
   void render(Canvas canvas) {
@@ -83,49 +72,31 @@ class FishTankGame extends Game {
     // Draw the rectangle to the screen
     canvas.drawRect(bgRect, bgPaint);
     // Spawn fishies
-    fishies.forEach((Fish fish) => fish.render(canvas));
+    //fishy.render(canvas);
+    fishies[0].render(canvas);
+    if (evilFishies.length > 0) {
+      evilFishies[0].render(canvas);
+    }
 
-    feedButton.render(canvas);
-    consumeButton.render(canvas);
-    journeyButton.render(canvas); 
-    summonButton.render(canvas);
   }
 
   void update(double t) {
+    //fishy.update(t);
     fishies.forEach((Fish fish) => fish.update(t));
   }
 
-  void resize(Size size) {
-    screenSize = size;
-    super.resize(size);
-    tileSize = screenSize.width / 9;
-  }
 
   void onTapDown(TapDownDetails d) {
     // bool for preventing resource waste
     bool isHandled = false;
 
-    Rect tempRect;
-
-    if (!isHandled && summonButton.rect.contains(d.globalPosition)) {
-      summonFishy();
-      //summonButton.onTapDown();
-      isHandled = true;
-    }
-
-    if (!isHandled && feedButton.rect.contains(d.globalPosition)) {
-      growFishy(); 
-      isHandled = true; 
-    }
-
     if (!isHandled) {
       isHandled = true;
-      fishies.forEach((Fish fish) {
-        if (fish.fishRect.contains(d.globalPosition)) {
-          fish.onTapDown();
+        if (fishy.fishRect.contains(d.globalPosition)) {
+          fishy.onTapDown();
           isHandled = true; 
         }
-      });
+      
     }
   }
 }
