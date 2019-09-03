@@ -12,6 +12,10 @@ import 'package:flutter/gestures.dart';
 import 'package:fish_tank/components/button-feed.dart';
 import 'package:fish_tank/fish_tank_ui.dart';
 import 'package:fish_tank/components/objects/enemy_fish.dart';
+import 'package:fish_tank/components/background-ocean.dart';
+import 'package:fish_tank/components/objects/bubble.dart';
+import 'package:fish_tank/controllers/bubble-spawner.dart';
+import 'package:fish_tank/components/objects/bubble-blue.dart';
 
 
 
@@ -24,7 +28,10 @@ class FishTankGame extends Game {
   double growRate = 1;  
   List<Fish> fishies; 
   List<EnemyFish> evilFishies; 
+  List<Bubble> bubbles; 
   Fish fishy; 
+  Ocean background; 
+  BubbleSpawner bubbleSpawner; 
 
   FishTankGame(this.ui) {
     initialize(); 
@@ -34,9 +41,12 @@ class FishTankGame extends Game {
     rnd = Random();
     fishies = List<Fish>(); 
     evilFishies = List<EnemyFish>(); 
+    bubbles = List<Bubble>(); 
     resize(await Flame.util.initialDimensions());
+    background = Ocean(this); 
+    bubbleSpawner = BubbleSpawner(this); 
     summonFishy(); 
-
+    summonBubble(); 
   }
 
   void resize(Size size) {
@@ -52,9 +62,14 @@ class FishTankGame extends Game {
    fishies.add(fishy); 
   }
 
+  void summonBubble() {
+    double x = rnd.nextDouble() * (screenSize.width - tileSize);
+    double y = (screenSize.height);
+    bubbles.add(BubbleBlue(this, x, y));
+  }
+
   //Implement this
   void start() {
-
   }
 
   // Attempts to update fish size by calling a if statement in the update method of the fishy
@@ -64,25 +79,23 @@ class FishTankGame extends Game {
   }
 
   void render(Canvas canvas) {
-    // Declare a rectangle as big as the screen
-    Rect bgRect = Rect.fromLTWH(0, 0, screenSize.width, screenSize.height);
-    // Dclare a paint object and assign color to it
-    Paint bgPaint = Paint();
-    bgPaint.color = Color(0xFF3300FF);
-    // Draw the rectangle to the screen
-    canvas.drawRect(bgRect, bgPaint);
-    // Spawn fishies
-    //fishy.render(canvas);
+    background.render(canvas); 
+   
+    // Spawn fishies/bubbles
     fishies[0].render(canvas);
+    bubbles.forEach((Bubble bubble) => bubble.render(canvas));
+
     if (evilFishies.length > 0) {
       evilFishies[0].render(canvas);
     }
-
   }
 
   void update(double t) {
     //fishy.update(t);
+    bubbleSpawner.update(t); 
     fishies.forEach((Fish fish) => fish.update(t));
+    bubbles.forEach((Bubble bubble) => bubble.update(t));
+    bubbles.removeWhere((Bubble bubble) => bubble.isOffScreen); 
   }
 
 
@@ -96,7 +109,6 @@ class FishTankGame extends Game {
           fishy.onTapDown();
           isHandled = true; 
         }
-      
     }
   }
 }

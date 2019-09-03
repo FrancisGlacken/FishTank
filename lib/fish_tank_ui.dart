@@ -23,47 +23,7 @@ class FishTankUIState extends State<FishTankUI> with WidgetsBindingObserver {
   Random rng = new Random(); 
   int enemyFishHP; 
   String battleDialogue = "A wild Cheep Cheep appeared!!!"; 
-
-  void decreaseHealth() {
-    //setState(() => game.fishies[0].fishHP = game.fishies[0].fishHP - 10);
-  }
-
-  void increaseSize() {
-    setState(() {
-      game.growRate = game.growRate * 1.1;
-      game.fishies[0].fishSizeMulti =
-          game.fishies[0].fishSizeMulti * game.growRate;
-    });
-  }
-
-  void updateBattleDialogue(String dialogue, enemyHP) {
-    setState(() {
-      enemyFishHP = enemyHP; 
-      battleDialogue = dialogue; 
-    }); 
-  }
-
-  void randomBattle() {
-    setState(() {
-      game.fishies[0].fishLocation = FishLocation.battle;
-      // What are these variables doing lol
-      // I think we need this to maintain the grid for different phone sizes
-      double x = .8 * (game.screenSize.width - game.tileSize);
-      double y = .4 * (game.screenSize.height - game.tileSize);
-      game.evilFishies.add(CheepBlue(game, x, y));
-      enemyFishHP = game.evilFishies[0].fishHP;
-      currentScreen = UIScreen.battle;
-    });
-  }
-
-  void toHomeScreen() {
-    setState(() {
-      game.fishies[0].fishLocation = FishLocation.home;
-      game.evilFishies.clear();
-      battleDialogue = "A wild Cheep Cheep appeared!!!"; 
-      currentScreen = UIScreen.home;
-    });
-  }
+  bool buttonsEnabled = false; 
 
   void initState() {
     super.initState();
@@ -103,6 +63,7 @@ class FishTankUIState extends State<FishTankUI> with WidgetsBindingObserver {
         padding: EdgeInsets.only(top: 5, left: 5, right: 15),
         child: Row(children: <Widget>[
           hpView(),
+          screenSizeView(),
         ]));
   }
 
@@ -139,37 +100,23 @@ class FishTankUIState extends State<FishTankUI> with WidgetsBindingObserver {
         child: Stack(children: <Widget>[
         enemyHPView(),
         battleDialogView(),
-        Container(
-          child: Align(
-              alignment: Alignment.bottomCenter,
-              child: Table(
-                border: TableBorder.all(),
-                children: [
-                  TableRow(children: [fightButton(), fleeButton()]),
-                  TableRow(children: [fleeButton(), fleeButton()]),
-                ],
-              )))
+        AbsorbPointer(
+          absorbing: buttonsEnabled,
+          child: Container(
+            child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Table(
+                  border: TableBorder.all(),
+                  children: [
+                    TableRow(children: [fightButton(), powerButton()]),
+                    TableRow(children: [itemsButton(), fleeButton()]),
+                  ],
+                ))),
+        )
     ]));
   }
 
-  // Widget for displaying battle dialogue
-  Widget battleDialogView() {
-    return Positioned(
-      width: game.screenSize.width,
-      bottom: 200,
-      child: Text(battleDialogue, 
-      textAlign: TextAlign.left,
-      style: TextStyle(
-        fontSize: 20,
-        color: Color(0xffffffff),
-      ),
-        
-      ),
-    );
-  }
-
   // Buttons //
-
 
   // button for Feed
   Widget feedButton() {
@@ -184,7 +131,7 @@ class FishTankUIState extends State<FishTankUI> with WidgetsBindingObserver {
             padding: EdgeInsets.all(0.0),
             child: Image.asset(
               'assets/images/button-feed.png',
-              width: 140,
+              width: game.tileSize * 3,
               height: 70,
             )));
   }
@@ -202,7 +149,7 @@ class FishTankUIState extends State<FishTankUI> with WidgetsBindingObserver {
             padding: EdgeInsets.all(0.0),
             child: Image.asset(
               'assets/images/button-consume.png',
-              width: 140,
+              width: game.tileSize * 3,
               height: 70,
             )));
   }
@@ -220,7 +167,7 @@ class FishTankUIState extends State<FishTankUI> with WidgetsBindingObserver {
             padding: EdgeInsets.all(0.0),
             child: Image.asset(
               'assets/images/button-journey.png',
-              width: 140,
+              width: game.tileSize * 3,
               height: 70,
             )));
   }
@@ -238,9 +185,50 @@ class FishTankUIState extends State<FishTankUI> with WidgetsBindingObserver {
             padding: EdgeInsets.all(0.0),
             child: Image.asset(
               'assets/images/button-fight.png',
-              width: 140,
-              height: 70,
-            )));
+              width: game.tileSize * 4.5,
+              height: 100,
+            )
+          )
+        );
+  }
+
+   Widget powerButton() {
+    return Ink(
+        decoration: ShapeDecoration(
+          shape: CircleBorder(),
+        ),
+        child: FlatButton(
+            onPressed: () {
+
+            },
+            padding: EdgeInsets.all(0.0),
+            child: Image.asset(
+              'assets/images/button-power.png',
+              width: game.tileSize * 4.5,
+              height: 100,
+            )
+          )
+        );
+  }
+
+  // button for items
+  Widget itemsButton() {
+    return Ink(
+        decoration: ShapeDecoration(
+          shape: CircleBorder(),
+        ),
+        child: FlatButton(
+            onPressed: () {
+
+            },
+            padding: EdgeInsets.all(0.0),
+            child: Image.asset(
+              'assets/images/button-item.png',
+              width: game.tileSize * 4.5,
+              height: 100,
+            )
+          )
+        );
   }
 
   // button for Battle - Flee
@@ -255,16 +243,38 @@ class FishTankUIState extends State<FishTankUI> with WidgetsBindingObserver {
             },
             padding: EdgeInsets.all(0.0),
             child: Image.asset(
-              'assets/images/button-fight.png',
-              width: 140,
-              height: 70,
+              'assets/images/button-flee.png',
+              width: game.tileSize * 4.5,
+              height: 100,
             )));
   }
 
-
-
-
   // Views //
+
+  // Widget for displaying battle dialogue
+  Widget battleDialogView() {
+    return Positioned(
+      width: game.screenSize.width,
+      bottom: 200,
+      child: Text(battleDialogue, 
+      textAlign: TextAlign.left,
+      style: TextStyle(
+        fontSize: 20,
+        color: Color(0xffffffff),
+      ),   
+      ),
+    );
+  }
+
+  // view for Screen Size 
+  Widget screenSizeView() {
+    return Align(
+      alignment: Alignment.topLeft,
+      child: Text(
+        game.screenSize.toString(),
+      )
+    );
+  }
 
   // view for Hp
   Widget hpView() {
@@ -304,45 +314,112 @@ class FishTankUIState extends State<FishTankUI> with WidgetsBindingObserver {
         ));
   }
 
+  // End of Views //
+
+  // Home Stuff
+
+  void increaseSize() {
+    setState(() {
+      game.growRate = game.growRate * 1.1;
+      game.fishies[0].fishSizeMulti =
+          game.fishies[0].fishSizeMulti * game.growRate;
+    });
+  }
 
   // Battle Stuff
 
+  void disableButtons() {
+    setState(() => buttonsEnabled = true); 
+  }
+
+  // decreases fishy's health by 10
+  void decreaseHealth() {
+    setState(() => game.fishies[0].fishHP = game.fishies[0].fishHP - 10);
+  }
+
+
+  // Updates battle dialogue with given string and the enemy's Hp
+  void updateBattleDialogue(String dialogue, enemyHP) {
+    setState(() {
+      enemyFishHP = enemyHP; 
+      battleDialogue = dialogue; 
+    }); 
+  }
+
+  // Brings user to battle mode
+  void randomBattle() {
+    setState(() {
+      game.fishies[0].fishLocation = FishLocation.battle;
+      // What are these variables doing lol
+      // I think we need this to maintain the grid for different phone sizes
+      double x = .8 * (game.screenSize.width - game.tileSize);
+      double y = .4 * (game.screenSize.height - game.tileSize);
+      game.evilFishies.add(CheepBlue(game, x, y));
+      enemyFishHP = game.evilFishies[0].fishHP;
+      currentScreen = UIScreen.battle;
+      // Battle starts
+    });
+  }
+
+  // Brings user back to home screen. 
+  void toHomeScreen() {
+    setState(() {
+      game.fishies[0].fishLocation = FishLocation.home;
+      game.evilFishies.clear();
+      battleDialogue = "A wild Cheep Cheep appeared!!!"; 
+      currentScreen = UIScreen.home;
+    });
+  }
+
   fightCommand() {
+    disableButtons(); 
     // Get attack damage
-    int playerAttack = game.fishies[0].fishStr - game.evilFishies[0].fishDef; 
+    Fish goodFish = game.fishies[0]; 
+    EnemyFish evilFish = game.evilFishies[0]; 
+    int playerAttack = goodFish.fishStr - evilFish.fishDef + rng.nextInt(3);
     String dialogue; 
 
     game.fishies[0].fishLocation = FishLocation.attackAnim; 
-    delayBySeconds(3); 
 
     if (rng.nextInt(100) <= game.fishies[0].fishiness) {
       playerAttack = playerAttack * 3; 
       dialogue = "Critical hit!!! You dealt " + playerAttack.toString() + " damage!"; 
+      evilFish.fishHP = evilFish.fishHP - playerAttack; 
     } else {
       dialogue = "You dealt " + playerAttack.toString() + " damage!"; 
+      evilFish.fishHP = evilFish.fishHP - playerAttack; 
     }
-    
-    // if enemyHP is less then 0 then clear him off screen and go to some reward screen
-    Future<void> delayThis() {
-      return Future.delayed(Duration(seconds: 3), () {
-        updateBattleDialogue(dialogue, 
-                            game.evilFishies[0].fishHP 
-                            = game.evilFishies[0].fishHP - playerAttack);
-      });
+
+    // Update out fishies
+    goodFish = game.fishies[0]; 
+    evilFish = game.evilFishies[0];
+    if (evilFish.fishHP <= 0) {
+      game.evilFishies.clear(); 
+      toHomeScreen();  
+    } else {
+      updateBattleDialogue(dialogue, game.evilFishies[0].fishHP); 
     }
-    Future<void> delayThisToo() {
-      return Future.delayed(Duration(seconds: 3), () {
+
+    Future.delayed(const Duration(milliseconds: 2000), () {
+      setState(() {
+        buttonsEnabled = false; 
         enemyAttack(); 
       });
-    }
+    });
+    
   }
 
   enemyAttack() {
-    updateBattleDialogue("lets go champ", 50);
-  }
+    Fish goodFish = game.fishies[0]; 
+    EnemyFish evilFish = game.evilFishies[0]; 
+    int enemyAttack = evilFish.fishStr - goodFish.fishDef; 
+    String dialogue;
 
-  Future<void> delayBySeconds(int sec) {
-    return Future.delayed(Duration(seconds: sec), () => print('Large Latte'));
+    goodFish.fishHP = goodFish.fishHP - enemyAttack; 
+    goodFish = game.fishies[0];
+    evilFish = game.evilFishies[0]; 
+    dialogue = "The enemy attacks for " + enemyAttack.toString() + "damage!!!"; 
+    updateBattleDialogue(dialogue, evilFish.fishHP);
   }
 }
 

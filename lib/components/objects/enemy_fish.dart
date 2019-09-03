@@ -16,7 +16,7 @@ class EnemyFish {
   String fishName;
   int fishHP = 20;
   int fishMP = 5;
-  int fishStr = 5;
+  int fishStr = 12;
   int fishDef = 5;
   int fishInt = 5;
   int fishiness = 5;
