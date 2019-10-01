@@ -44,21 +44,48 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-  - assets/images/cheep-green.png
   - assets/images/cheep-red.png
+  - assets/images/cheep-green.png
   - assets/images/cheep-blue.png
   - assets/images/cheep-white.png
+  - assets/images/cheep-red-right.png
+  - assets/images/cheep-green-right.png
+  - assets/images/cheep-blue-right.png
+  - assets/images/cheep-white-right.png
   - assets/images/button-consume.png
   - assets/images/button-feed.png
   - assets/images/button-journey.png
   - assets/images/button-quick.png
   - assets/images/button-fight.png
+  - assets/images/button-fight-2.png
   - assets/images/button-power.png
   - assets/images/button-item.png
   - assets/images/button-flee.png
-  - assets/images/background-fish-tank.png
-  - assets/audio/sfx/bubblebobble11.wav
+  - assets/images/background-fish-tank-1.png
+  - assets/images/background-fish-tank-2.png
+  - assets/images/background-fish-tank-3.png
+  - assets/images/background-fish-tank-4.png
   - assets/images/bubble.png
+  - assets/images/fish-sprite-1-L.png
+  - assets/images/fish-sprite-1-R.png
+  - assets/images/fish-sprite-1-Dead.png
+  - assets/images/fish-sprite-2-L.png
+  - assets/images/fish-sprite-2-R.png
+  - assets/images/fish-sprite-2-L-200.png
+  - assets/images/fish-sprite-2-500.png
+  - assets/images/fish-sprite-3-L.png
+  - assets/images/fish-sprite-3-R.png
+  - assets/images/fish-sprite-3-500.png
+  - assets/images/fish-sprite-4-L.png
+  - assets/images/fish-sprite-4-R.png
+  - assets/images/fish-sprite-4-500.png
+  - assets/images/fish-sprite-5-L.png
+  - assets/images/fish-sprite-5-R.png
+  - assets/images/fish-sprite-5-500.png
+  - assets/images/fish-food-1.png
+  - assets/images/shop-exit-sign.png
+  - assets/audio/sfx/bubblebobble11.wav
+
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -1,11 +1,14 @@
 import 'dart:ui';
+import 'dart:math';
 import 'package:fish_tank/components/objects/enemy_fish.dart';
+import 'package:fish_tank/components/objects/fish-red.dart';
 import 'package:fish_tank/fish_tank_game.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame/flame.dart';
 import 'package:flutter/widgets.dart';
 
-enum FishLocation { home, battle, attackAnim, journey }
+enum FishLocation { home, feed, battle, attackAnim, journey }
+
 
 class Fish {
   final FishTankGame game; 
@@ -13,24 +16,27 @@ class Fish {
   List<Sprite> fishSprite;
   Sprite fishSpriteAlt;
   double fishId; 
-  double fishSpriteIndex = 0; 
+  int fishSpriteIndex; 
   Offset targetLocation;
   double fishSizeNumber = 1; 
   bool wasTapped = false; 
   FishLocation fishLocation = FishLocation.home; 
+  int x; 
+  bool fishSelected = false; 
   
 
   // Personal stats
-  String fishName;
+  String fishName = "my fishy"; 
   int fishHP = 100; 
   int fishMP = 20;
-  int fishStr = 8;
+  int fishStr = 10;
   int fishDef = 5; 
   int fishInt = 3; 
   int fishiness = 7;
   int fishLuck = 8; 
   int fishExp = 0;  
   
+  // Why is this a getter?
   double get fishSpeed => game.tileSize * 1;  
   double get fishSizeMulti => 1; 
 
@@ -38,22 +44,34 @@ class Fish {
     fishSizeNumber = fishSizeMulti * multiplier; 
   }
 
-  Fish(this.game, double x, double y) {
+  // Add width/height
+  Fish(this.game, double x, double y, double w, double h) {
     setTargetLocation();
-    fishRect = Rect.fromLTWH(x, y, game.tileSize, game.tileSize);
+    fishRect = Rect.fromLTWH(x, y, w, h);
   }
 
   void setTargetLocation() {
-        double x = game.rnd.nextDouble() * (game.screenSize.width - (game.tileSize));
-        double y = game.rnd.nextDouble() * (game.screenSize.height - (game.tileSize));
-        targetLocation = Offset(x, y);
+    double yAxisRng = game.rnd.nextDouble(); 
+    if (yAxisRng < .03) { yAxisRng += .03; }
+    double x = game.rnd.nextDouble() * (game.screenSize.width - (game.tileSize));
+    double y = yAxisRng * (game.screenSize.height - (game.tileSize));
+    targetLocation = Offset(x, y);
+  }
+
+  void setFeedTargetLocation() {
+    targetLocation = Offset(game.foods[0].x, game.foods[0].y);
   }
 
   void render(Canvas c) {
-    fishSprite[fishSpriteIndex.toInt()].renderRect(c, fishRect.inflate(fishSizeNumber)); 
+    if (targetLocation.direction >= 1) {
+    fishSprite[0].renderRect(c, fishRect.inflate(fishSizeNumber));       
+    } else if (targetLocation.direction < 1) {
+    fishSprite[1].renderRect(c, fishRect.inflate(fishSizeNumber)); 
+    }
   }
 
   void update(double t) {
+    // home animation
     if (fishLocation == FishLocation.home) {
       double stepDistance = fishSpeed * t;
       Offset toTarget = targetLocation - Offset(fishRect.left, fishRect.top);
@@ -67,8 +85,19 @@ class Fish {
       setTargetLocation(); 
       }
 
+    } else if (fishLocation == FishLocation.feed) {
+      if (game.foods.length > 0) {
+      double stepDistance = fishSpeed * t; 
+      setFeedTargetLocation();
+      Offset toTarget = targetLocation - Offset(fishRect.left, fishRect.top); 
+      if (stepDistance < toTarget.distance) {
+        Offset stepToTarget = Offset.fromDirection(toTarget.direction, stepDistance); 
+        fishRect = fishRect.shift(stepToTarget); 
+        setFeedTargetLocation(); 
+      }}
+       
     } else if (fishLocation == FishLocation.battle) {
-      double stepDistance = fishSpeed * t;
+      double stepDistance = fishSpeed * t * 15;
       targetLocation = Offset(80, 300);
       Offset toTarget = targetLocation - Offset(fishRect.left, fishRect.top);
       if (!wasTapped && stepDistance < toTarget.distance) {
@@ -97,6 +126,7 @@ class Fish {
 
   void onTapDown() {
     Flame.audio.play('sfx/bubblebobble11.wav');
+    fishSelected = true; 
     wasTapped = true; 
   }
 }
