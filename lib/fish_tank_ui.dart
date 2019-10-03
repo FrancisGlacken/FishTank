@@ -8,6 +8,8 @@ import 'package:fish_tank/components/objects/fish.dart';
 import 'package:fish_tank/components/objects/enemy_fish.dart';
 import 'package:fish_tank/components/objects/fish-mud.dart';
 
+enum UIScreen { home, battle, shop, journey }
+
 class FishTankUI extends StatefulWidget {
   final FishTankUIState state = FishTankUIState();
   State<StatefulWidget> createState() => state;
@@ -36,6 +38,7 @@ class FishTankUIState extends State<FishTankUI> with WidgetsBindingObserver {
   void update() {
     setState(() {});
   }
+  
 
   // Build method for everything
   @override
@@ -153,8 +156,13 @@ class FishTankUIState extends State<FishTankUI> with WidgetsBindingObserver {
         ),
         child: FlatButton(
             onPressed: () {
-              game.fishies[0].fishLocation = FishLocation.feed;
+              game.fishies.forEach((Fish fishy) {
+                if (fishy.fishSelected) {
+                  fishy.fishLocation = FishLocation.feed;
+                }
+              });
               feedFishy();
+              game.increaseSize(); 
             },
             padding: EdgeInsets.all(0.0),
             child: Image.asset(
@@ -388,7 +396,7 @@ class FishTankUIState extends State<FishTankUI> with WidgetsBindingObserver {
     return Align(
         alignment: Alignment.topCenter,
         child: Text(
-          game.growRate.toString(),
+          "game.fishies[0].growRate.toString()",
           textAlign: TextAlign.left,
           style: TextStyle(
             fontSize: 20,
@@ -407,13 +415,16 @@ class FishTankUIState extends State<FishTankUI> with WidgetsBindingObserver {
     });
   }
 
-  void increaseSize() {
-    setState(() {
-      game.growRate = game.growRate + (game.growRate * .1);
-      game.fishies[0].fishSizeMulti =
-          game.fishies[0].fishSizeMulti * game.growRate;
-    });
-  }
+  // void increaseSize() {
+  //   setState(() {
+  //     game.fishies.forEach((Fish fishy) {
+  //       if (fishy.fishSelected) {
+  //         fishy.growRate = fishy.growRate + (fishy.growRate * .1);
+  //         fishy.fishSizeMulti = fishy.fishSizeMulti * fishy.growRate;
+  //       }
+  //     }); 
+  //   });
+  // }
 
   // Battle Stuff
   void disableButtons() {
@@ -517,7 +528,7 @@ class FishTankUIState extends State<FishTankUI> with WidgetsBindingObserver {
       Future.delayed(const Duration(milliseconds: 5000), () {
         setState(() {
           game.evilFishies.clear();
-          increaseSize();
+          game.increaseSize();
           toHomeScreen();
         });
       });
@@ -542,7 +553,6 @@ class FishTankUIState extends State<FishTankUI> with WidgetsBindingObserver {
   }
 }
 
-enum UIScreen { home, battle, shop, journey }
 
 // Junkyard
 

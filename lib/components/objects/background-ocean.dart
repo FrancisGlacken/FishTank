@@ -8,7 +8,7 @@ class Ocean {
   Rect bgRect; 
 
   Ocean(this.game) {
-    bgSprite = Sprite('background-fish-tank-4.png');
+    bgSprite = Sprite('background-fish-tank-5.png');
     bgRect = Rect.fromLTWH(
       0, 
       game.screenSize.height - (game.tileSize * 23),

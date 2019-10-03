@@ -30,7 +30,10 @@ void main() async {
   Flame.audio.disableLog();
   // Pre load audio
   Flame.audio.loadAll(<String>[
-  'sfx/bubblebobble11.wav']);
+  'sfx/bubblebobble11.wav',
+  'sfx/bubble-pop-1.wav',
+  'sfx/bubble-pop-2.wav'
+  ]);
 
   SharedPreferences storage = await SharedPreferences.getInstance(); 
   // Create the game instance and the app

@@ -3,6 +3,7 @@ import 'package:fish_tank/fish_tank_game.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/widgets.dart';
 import 'dart:math';
+import 'package:flame/flame.dart'; 
 
 class Bubble {
   final FishTankGame game;
@@ -35,5 +36,6 @@ class Bubble {
     // Pop the bubble!
     wasTapped = true; 
     isOffScreen = true;
+    Flame.audio.play('sfx/bubble-pop-1.wav');
   }
 }

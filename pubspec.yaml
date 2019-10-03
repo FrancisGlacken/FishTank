@@ -65,6 +65,7 @@ flutter:
   - assets/images/background-fish-tank-2.png
   - assets/images/background-fish-tank-3.png
   - assets/images/background-fish-tank-4.png
+  - assets/images/background-fish-tank-5.png
   - assets/images/bubble.png
   - assets/images/fish-sprite-1-L.png
   - assets/images/fish-sprite-1-R.png
@@ -85,6 +86,8 @@ flutter:
   - assets/images/fish-food-1.png
   - assets/images/shop-exit-sign.png
   - assets/audio/sfx/bubblebobble11.wav
+  - assets/audio/sfx/bubble-pop-1.wav
+  - assets/audio/sfx/bubble-pop-2.wav
 
 
 
