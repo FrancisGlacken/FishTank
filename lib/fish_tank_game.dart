@@ -33,14 +33,16 @@ class FishTankGame extends Game {
   List<Food> foods;
   Ocean background;
   BubbleSpawner bubbleSpawner;
-  String selectedFishName; 
-  int selectedFishArrayId; 
+  String selectedFishName;
+  int selFishId, selFishExp; 
+  int fishTally;
 
   FishTankGame(this.ui) {
     initialize();
   }
 
   void initialize() async {
+    fishTally = 0;
     rnd = Random();
     fishies = List<Fish>();
     evilFishies = List<EnemyFish>();
@@ -86,14 +88,17 @@ class FishTankGame extends Game {
     // bool for preventing resource waste
     bool isHandled = false;
 
-    if (!isHandled) {
+    if (!isHandled && ui.currentScreen == UIScreen.home) {
       fishies.forEach((Fish fishy) {
         if (fishy.fishRect.contains(d.globalPosition)) {
-         fishy.onTapDown();
-         ui.updateSelectedFishyName();
-        } 
-      });  
-      isHandled = true; 
+          fishy.onTapDown();
+          selectedFishName = fishy.fishName;
+          selFishId = fishy.fishId;
+          selFishExp = fishy.fishExp;
+          ui.updateSelectedFishyName();
+          isHandled = true;
+        }
+      });
     }
 
     if (!isHandled) {
@@ -112,18 +117,19 @@ class FishTankGame extends Game {
     double y = (screenSize.height - tileSize);
     switch (style) {
       case FishStyle.red:
-        fishy = RedFish(this, x, y, 20, 20, "Red");
+        fishy = RedFish(this, x, y, 20, 20, "Red", fishTally);
         break;
       case FishStyle.blue:
-        fishy = BlueFish(this, x, y, 20, 20, "Blue");
+        fishy = BlueFish(this, x, y, 20, 20, "Blue", fishTally);
         break;
       case FishStyle.green:
-        fishy = GreenFish(this, x, y, 20, 20, "Green");
+        fishy = GreenFish(this, x, y, 20, 20, "Green", fishTally);
         break;
       case FishStyle.purple:
-        fishy = PurpleFish(this, x, y, 20, 20, "Purple");
+        fishy = PurpleFish(this, x, y, 20, 20, "Purple", fishTally);
         break;
     }
+    fishTally = fishTally + 1;
     fishies.add(fishy);
   }
 
@@ -160,16 +166,13 @@ class FishTankGame extends Game {
   }
 
   void increaseSize() {
-      fishies.forEach((Fish fishy) {
-        if (fishy.fishSelected) {
-          fishy.increaseSize(); 
-        }
-      }); 
+    fishies.forEach((Fish fishy) {
+      if (fishy.fishId == selFishId) {
+        fishy.increaseSize();
+      }
+    });
   }
 }
-
-
-
 
 // Unused code
 // //Implement this

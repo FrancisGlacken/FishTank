@@ -18,13 +18,13 @@ class Fish {
   Offset targetLocation;
   FishLocation fishLocation = FishLocation.home; 
   bool wasTapped = false; 
-  double fishSizeNumber = 10; 
+  double fishSizeNumber = 1; 
   double growRate = 1;
 
   
 
   // Personal stats
-  double fishId; 
+  int fishId; 
   String fishName = "my fishy"; 
   int fishHP = 100; 
   int fishMP = 20;
@@ -38,19 +38,15 @@ class Fish {
   // Why is this a getter?
   double get fishSpeed => game.tileSize * 1;  
   double get fishSizeMulti => 1; 
-  bool get fishSelected => false; 
 
   set fishSizeMulti(double multiplier) {
     fishSizeNumber = fishSizeMulti * multiplier; 
   }
 
-  set fishSelected(bool fishSelected) {
-    fishSelected = fishSelected; 
-  }
-
   // Add width/height
-  Fish(this.game, double x, double y, double w, double h, String name) {
+  Fish(this.game, double x, double y, double w, double h, String name, int id) {
     fishName = name; 
+    fishId = id;
     setTargetLocation();
     fishRect = Rect.fromLTWH(x, y, w, h);
   }
@@ -131,7 +127,6 @@ class Fish {
 
   void onTapDown() {
     Flame.audio.play('sfx/bubble-pop-2.wav');
-    fishSelected = true; 
     wasTapped = true; 
   }
 

@@ -4,7 +4,7 @@ import 'package:fish_tank/fish_tank_game.dart';
 
 class BlueFish extends Fish {
   BlueFish(FishTankGame game, double x, double y,
-                       double width, double height, String name) : super(game, x, y, width, height, name) {
+                       double width, double height, String name, int id) : super(game, x, y, width, height, name, id) {
     fishSprite = List<Sprite>();
     fishSprite.add(Sprite('fish-sprite-3-L.png'));
     fishSprite.add(Sprite('fish-sprite-3-R.png')); 

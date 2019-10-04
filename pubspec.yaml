@@ -85,6 +85,7 @@ flutter:
   - assets/images/fish-sprite-5-500.png
   - assets/images/fish-food-1.png
   - assets/images/shop-exit-sign.png
+  - assets/images/fish-button-circle.png
   - assets/audio/sfx/bubblebobble11.wav
   - assets/audio/sfx/bubble-pop-1.wav
   - assets/audio/sfx/bubble-pop-2.wav
