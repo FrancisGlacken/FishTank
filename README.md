@@ -1,6 +1,7 @@
 # fish_tank
 
-A new Flutter project.
+A work in progress. This is a game that lets you love and cuddle your pet fishy! Made using the Flame Engine.
+
 
 ## Getting Started
 
