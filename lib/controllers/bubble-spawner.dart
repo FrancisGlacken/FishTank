@@ -27,7 +27,7 @@ class BubbleSpawner {
       game.summonBubble();
       if (currentInterval > minSpawnInterval) {
         currentInterval -= intervalChange;
-        currentInterval -= (currentInterval * .02).toInt();
+        currentInterval -= (currentInterval * .15).toInt();
       }
       nextSpawn = nowTimestamp + currentInterval; 
     }

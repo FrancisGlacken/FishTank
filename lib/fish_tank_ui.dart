@@ -20,7 +20,7 @@ class FishTankUIState extends State<FishTankUI> with WidgetsBindingObserver {
   SharedPreferences storage;
   UIScreen currentScreen = UIScreen.home;
   Random rng = new Random();
-  int fishHP, enemyFishHP;
+  int fishyHP, enemyFishHP, fishyExp;
   String battleDialogue = "A wild Mud Fish appeared!!!";
   String fishName = ""; 
   bool buttonsAbsorbed = false;
@@ -143,13 +143,8 @@ class FishTankUIState extends State<FishTankUI> with WidgetsBindingObserver {
         ),
         child: FlatButton(
             onPressed: () {
-              // game.fishies.forEach((Fish fishy) {
-              //   if (fishy.fishSelected) {
-              //     fishy.fishLocation = FishLocation.feed;
-              //   }
-              // });
+              game.fishies[game.selFishId].fishLocation = FishLocation.feed;
               feedFishy();
-              game.increaseSize(); 
             },
             padding: EdgeInsets.all(0.0),
             child: Image.asset(
@@ -371,7 +366,7 @@ class FishTankUIState extends State<FishTankUI> with WidgetsBindingObserver {
     return Align(
         alignment: Alignment.topLeft,
         child: Text(
-            fishHP.toString(),
+            fishyHP.toString(),
             textAlign: TextAlign.left,
             style: TextStyle(
               fontSize: 20,
@@ -397,7 +392,7 @@ class FishTankUIState extends State<FishTankUI> with WidgetsBindingObserver {
     return Align(
         alignment: Alignment.topCenter,
         child: Text(
-          game.selFishExp.toString(),
+          fishyExp.toString(),
           textAlign: TextAlign.left,
           style: TextStyle(
             fontSize: 20,
@@ -437,9 +432,8 @@ class FishTankUIState extends State<FishTankUI> with WidgetsBindingObserver {
   }
 
   // Updates battle dialogue with given string and the enemy's Hp
-  void updateBattleDialogue(String dialogue, enemyHP) {
+  void updateBattleDialogue(String dialogue) {
     setState(() {
-      enemyFishHP = enemyHP;
       battleDialogue = dialogue;
     });
   }
@@ -478,7 +472,8 @@ class FishTankUIState extends State<FishTankUI> with WidgetsBindingObserver {
       double x = .8 * (game.screenSize.width - game.tileSize);
       double y = .4 * (game.screenSize.height - game.tileSize);
       game.evilFishies.add(MudFish(game, x, y));
-      fishHP = game.fishies[game.selFishId].fishHP; 
+      fishyHP = game.fishies[game.selFishId].fishHP; 
+      fishyExp = game.fishies[game.selFishId].fishExp; 
       enemyFishHP = game.evilFishies[0].fishHP;
       currentScreen = UIScreen.battle;
       // Battle starts
@@ -505,12 +500,19 @@ class FishTankUIState extends State<FishTankUI> with WidgetsBindingObserver {
 
     // If EnemyFish still has HP
     if (game.evilFishies[0].fishHP <= 0) {
-      updateBattleDialogue(battleDialogue = "Your fishy won!!!", 0);
+      enemyFishHP = 0;
+      updateBattleDialogue(battleDialogue = "Your fishy won!!!");
       enemyFishDead();
       Future.delayed(const Duration(milliseconds: 5000), () {
         setState(() {
           game.evilFishies.clear();
           game.increaseSize();
+          fishyExp = game.fishies[game.selFishId].fishExp;
+          updateBattleDialogue(battleDialogue = "Your fishy gained experience!");
+        });
+      });
+      Future.delayed(const Duration(milliseconds: 8000), () {
+        setState(() {
           toHomeScreen();
         });
       });
@@ -521,7 +523,8 @@ class FishTankUIState extends State<FishTankUI> with WidgetsBindingObserver {
           buttonsAbsorbed = false;
         });
       });
-      updateBattleDialogue(dialogue, game.evilFishies[0].fishHP);
+      enemyFishHP =  game.evilFishies[0].fishHP;
+      updateBattleDialogue(dialogue);
     }
   } // End of Fight Commands
 
@@ -529,9 +532,10 @@ class FishTankUIState extends State<FishTankUI> with WidgetsBindingObserver {
     int enemyAttack = game.evilFishies[0].fishStr - game.fishies[game.selFishId].fishDef;
     String dialogue;
     game.fishies[game.selFishId].fishHP = game.fishies[game.selFishId].fishHP - enemyAttack;
-    fishHP = game.fishies[game.selFishId].fishHP;
+    fishyHP = game.fishies[game.selFishId].fishHP;
+    enemyFishHP = game.evilFishies[0].fishHP;
     dialogue = "The enemy attacks for " + enemyAttack.toString() + " damage!!!";
-    updateBattleDialogue(dialogue, game.evilFishies[0].fishHP);
+    updateBattleDialogue(dialogue);
     game.evilFishies[0].fishStatus = EnemyFishStatus.attacking;
   }
 }

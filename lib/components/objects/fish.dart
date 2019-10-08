@@ -60,7 +60,7 @@ class Fish {
   }
 
   void setFeedTargetLocation() {
-    targetLocation = Offset(game.foods[0].x, game.foods[0].y);
+    targetLocation = Offset(game.foods[game.foods.length - 1].x, game.tileSize * 8);
   }
 
   void render(Canvas c) {
@@ -88,14 +88,15 @@ class Fish {
 
     } else if (fishLocation == FishLocation.feed) {
       if (game.foods.length > 0) {
-      double stepDistance = fishSpeed * t; 
-      setFeedTargetLocation();
-      Offset toTarget = targetLocation - Offset(fishRect.left, fishRect.top); 
-      if (stepDistance < toTarget.distance) {
-        Offset stepToTarget = Offset.fromDirection(toTarget.direction, stepDistance); 
-        fishRect = fishRect.shift(stepToTarget); 
-        setFeedTargetLocation(); 
-      }}
+       double stepDistance = fishSpeed * t; 
+       setFeedTargetLocation();
+       Offset toTarget = targetLocation - Offset(fishRect.left, fishRect.top); 
+       if (stepDistance < toTarget.distance) {
+          Offset stepToTarget = Offset.fromDirection(toTarget.direction, stepDistance); 
+          fishRect = fishRect.shift(stepToTarget); 
+          setFeedTargetLocation(); 
+        }
+      }
        
     } else if (fishLocation == FishLocation.battle) {
       double stepDistance = fishSpeed * t * 15;
@@ -132,6 +133,7 @@ class Fish {
 
   void increaseSize() {
     growRate = growRate + (growRate * .1);
+    fishExp = (growRate * 10).toInt(); 
     fishSizeMulti = fishSizeMulti * growRate;
   }
 }
