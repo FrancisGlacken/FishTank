@@ -14,7 +14,7 @@ description: A new Flutter project.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.3.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -52,15 +52,6 @@ flutter:
   - assets/images/cheep-green-right.png
   - assets/images/cheep-blue-right.png
   - assets/images/cheep-white-right.png
-  - assets/images/button-consume.png
-  - assets/images/button-feed.png
-  - assets/images/button-journey.png
-  - assets/images/button-quick.png
-  - assets/images/button-fight.png
-  - assets/images/button-fight-2.png
-  - assets/images/button-power.png
-  - assets/images/button-item.png
-  - assets/images/button-flee.png
   - assets/images/background-fish-tank-1.png
   - assets/images/background-fish-tank-2.png
   - assets/images/background-fish-tank-3.png
@@ -83,9 +74,18 @@ flutter:
   - assets/images/fish-sprite-5-L.png
   - assets/images/fish-sprite-5-R.png
   - assets/images/fish-sprite-5-500.png
+  - assets/images/sprite-fish-bullet-1.png
   - assets/images/fish-food-1.png
   - assets/images/shop-exit-sign.png
   - assets/images/fish-button-circle.png
+  - assets/images/sprite-fish-jelly-1.png
+  - assets/images/sprite-fish-jelly-2.png
+  - assets/images/sprite-fish-jelly-3.png
+  - assets/images/sprite-fish-jelly-4.png
+  - assets/images/ui-button-fight.png
+  - assets/images/ui-button-eat.png
+  - assets/images/ui-button-flee.png
+  - assets/images/ui-button-power.png
   - assets/audio/sfx/bubblebobble11.wav
   - assets/audio/sfx/bubble-pop-1.wav
   - assets/audio/sfx/bubble-pop-2.wav

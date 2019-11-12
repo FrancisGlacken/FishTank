@@ -22,7 +22,7 @@ class EnemyFish {
   double get fishSpeed => game.tileSize * .1;  
 
   // Personal stats
-  String fishName;
+  String fishName = "bad fishy";
   int fishHP = 20;
   int fishMP = 5;
   int fishStr = 12;
@@ -32,9 +32,9 @@ class EnemyFish {
   int fishLuck = 0; 
   int fishExp = 0; 
 
-  EnemyFish(this.game, double x, double y) {
+  EnemyFish(this.game, double x, double y, w, h) {
     setDefaultLocation();
-    fishRect = Rect.fromLTWH(x, y, game.tileSize, game.tileSize); 
+    fishRect = Rect.fromLTWH(x, y, w, h); 
   }
 
   void render(Canvas c) {

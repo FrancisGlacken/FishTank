@@ -1,5 +1,4 @@
 import 'package:fish_tank/fish_tank_game.dart';
-import 'package:fish_tank/components/objects/food.dart';
 
 class FoodSpawner {
   final FishTankGame game;

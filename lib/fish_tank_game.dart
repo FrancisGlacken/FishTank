@@ -1,9 +1,9 @@
+import 'package:fish_tank/components/objects/fish-jellyfish.dart';
 import 'package:flame/game.dart';
 import 'package:flame/flame.dart';
 import 'dart:ui';
 import 'package:fish_tank/components/objects/fish.dart';
 import 'dart:math';
-import 'package:fish_tank/components/objects/fish-mud.dart';
 import 'package:fish_tank/components/objects/fish-red.dart';
 import 'package:fish_tank/components/objects/fish-blue.dart';
 import 'package:fish_tank/components/objects/fish-green.dart';
@@ -15,6 +15,7 @@ import 'package:fish_tank/components/objects/enemy_fish.dart';
 import 'package:fish_tank/components/objects/background-ocean.dart';
 import 'package:fish_tank/components/objects/bubble.dart';
 import 'package:fish_tank/controllers/bubble-spawner.dart';
+import 'package:fish_tank/controllers/jelly-fish-spawner.dart';
 import 'package:fish_tank/components/objects/bubble-blue.dart';
 import 'package:fish_tank/components/objects/food.dart';
 import 'package:fish_tank/components/objects/food-basic.dart';
@@ -31,11 +32,14 @@ class FishTankGame extends Game {
   List<EnemyFish> evilFishies;
   List<Bubble> bubbles;
   List<Food> foods;
+  List<JellyFish> jellies; 
   Ocean background;
   BubbleSpawner bubbleSpawner;
+  JellyFishSpawner jellyFishSpawner; 
   String selectedFishName;
   int selFishId, selFishExp; 
   int fishTally;
+  int gold = 1500; 
 
   FishTankGame(this.ui) {
     initialize();
@@ -47,10 +51,12 @@ class FishTankGame extends Game {
     fishies = List<Fish>();
     evilFishies = List<EnemyFish>();
     bubbles = List<Bubble>();
+    jellies = List<JellyFish>(); 
     foods = List<Food>();
     resize(await Flame.util.initialDimensions());
     background = Ocean(this);
     bubbleSpawner = BubbleSpawner(this);
+    jellyFishSpawner = JellyFishSpawner(this); 
   }
 
   void resize(Size size) {
@@ -72,16 +78,19 @@ class FishTankGame extends Game {
       evilFishies[0].render(canvas);
     }
     foods.forEach((Food food) => food.render(canvas));
+    jellies.forEach((JellyFish jelly) => jelly.render(canvas)); 
   }
 
   void update(double t) {
     //fishy.update(t);
     bubbleSpawner.update(t);
+    jellyFishSpawner.update(t); 
     fishies.forEach((Fish fish) => fish.update(t));
     evilFishies.forEach((EnemyFish enemyFish) => enemyFish.update(t));
     bubbles.forEach((Bubble bubble) => bubble.update(t));
     bubbles.removeWhere((Bubble bubble) => bubble.isOffScreen);
     foods.forEach((Food food) => food.update(t));
+    jellies.forEach((JellyFish jellies) => jellies.update(t));
   }
 
   void onTapDown(TapDownDetails d) {
@@ -131,12 +140,22 @@ class FishTankGame extends Game {
     }
     fishTally = fishTally + 1;
     fishies.add(fishy);
+    selectedFishName = fishy.fishName;
+    selFishId = fishy.fishId;
+    selFishExp = fishy.fishExp;
+    ui.updateSelectedFishyName();
   }
 
   void summonBubble() {
-    double x = rnd.nextDouble() * (screenSize.width - tileSize);
+    double x = rnd.nextDouble() * (screenSize.width * 1.5);
     double y = (screenSize.height);
     bubbles.add(BubbleBlue(this, x, y));
+  }
+
+  void summonJellyFish() {
+    double x = rnd.nextDouble() * (screenSize.width - tileSize);
+    double y = screenSize.height;
+    jellies.add(JellyFish(this, x, y)); 
   }
 
   // Food pellets need a lot of work
@@ -172,6 +191,8 @@ class FishTankGame extends Game {
       }
     });
   }
+
+  
 }
 
 // Unused code

@@ -1,6 +1,5 @@
 import 'package:fish_tank/fish_tank_game.dart';
 import 'package:fish_tank/fish_tank_ui.dart';
-import 'package:flame/position.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/util.dart';
 import 'package:flutter/services.dart';
@@ -20,10 +19,6 @@ void main() async {
     'cheep-blue.png',
     'cheep-green.png',
     'cheep-white.png',
-    'button-feed.png',
-    'button-consume.png',
-    'button-journey.png',
-    'button-quick.png'
     ]);
 
   // What does this do?

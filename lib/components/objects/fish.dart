@@ -1,7 +1,4 @@
 import 'dart:ui';
-import 'dart:math';
-import 'package:fish_tank/components/objects/enemy_fish.dart';
-import 'package:fish_tank/components/objects/fish-red.dart';
 import 'package:fish_tank/fish_tank_game.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame/flame.dart';

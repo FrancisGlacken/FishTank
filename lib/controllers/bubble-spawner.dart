@@ -1,13 +1,13 @@
 import 'package:fish_tank/fish_tank_game.dart';
-import 'package:fish_tank/components/objects/bubble.dart';
+
 
 // TODOx3: Make bubbles limited spawn, make bubbles pop, add different variants of bubbles
 class BubbleSpawner {
   final FishTankGame game;
   final int maxSpawnInterval = 5000;
-  final int minSpawnInterval = 250;
+  final int minSpawnInterval = 5000;
   final int intervalChange = 3;
-  int maxBubbles = 10; 
+  //int maxBubbles = 10; 
   int currentInterval;
   int nextSpawn; 
 
