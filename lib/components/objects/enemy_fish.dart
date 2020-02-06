@@ -49,8 +49,8 @@ class EnemyFish {
   }
 
   void setRandomLocation() {
-    x = game.rnd.nextInt(10) + .8 * (game.screenSize.width - game.tileSize); 
-    y = game.rnd.nextInt(10) + .4 * (game.screenSize.height - game.tileSize); 
+    x = game.rng.nextInt(10) + .8 * (game.screenSize.width - game.tileSize); 
+    y = game.rng.nextInt(10) + .4 * (game.screenSize.height - game.tileSize); 
     targetLocation = Offset(x, y); 
   }
 

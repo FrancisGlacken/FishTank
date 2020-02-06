@@ -5,9 +5,22 @@ import 'package:flame/util.dart';
 import 'package:flutter/services.dart';
 import 'package:flame/flame.dart';
 import 'package:flutter/gestures.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'components/objects/models/fish-data.dart';
+
+import 'package:path_provider/path_provider.dart' as path_provider; 
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Open up a gold Box
+  final appDocumentsDirectory = await path_provider.getApplicationDocumentsDirectory();
+  Hive.init(appDocumentsDirectory.path); 
+  Hive.registerAdapter(FishDataAdapter());
+  await Hive.openBox<int>("gold_box");
+  await Hive.openBox('fishy_box');
+
   // Create util for fullscreen and set orientation
   Util flameUtil = Util();
   await flameUtil.fullScreen();
@@ -30,7 +43,6 @@ void main() async {
   'sfx/bubble-pop-2.wav'
   ]);
 
-  SharedPreferences storage = await SharedPreferences.getInstance(); 
   // Create the game instance and the app
   FishTankUI gameUI = FishTankUI(); 
   FishTankGame game = FishTankGame(gameUI.state);
@@ -71,3 +83,5 @@ void main() async {
   flameUtil.addGestureRecognizer(tapper);
 }
 
+
+  

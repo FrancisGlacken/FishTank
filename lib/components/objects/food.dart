@@ -28,7 +28,8 @@ class Food {
     y = (game.tileSize * 1.5 * t); 
     foodOffset = Offset(0, y);
     foodRect = foodRect.shift(foodOffset);
-    if (foodRect.overlaps(game.fishies[game.selFishId].fishRect)) {
+    // THERE IS NO ID here "50"
+    if (foodRect.overlaps(game.fishies[50].fishRect)) {
       game.increaseSize();
       wasConsumed = true; 
       game.foods.removeWhere((Food food) => food.wasConsumed == true);

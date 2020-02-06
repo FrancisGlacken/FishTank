@@ -4,8 +4,9 @@ import 'package:flame/sprite.dart';
 import 'package:flame/flame.dart';
 import 'package:flutter/widgets.dart';
 
-enum FishLocation { home, feed, battle, attackAnim, journey }
+import 'random-name.dart';
 
+enum FishLocation { home, feed, battle, attackAnim, journey }
 
 class Fish {
   final FishTankGame game; 
@@ -17,12 +18,14 @@ class Fish {
   bool wasTapped = false; 
   double fishSizeNumber = 1; 
   double growRate = 1;
+  RandomName randomName = new RandomName(); 
 
   
 
   // Personal stats
   int fishId; 
   String fishName = "my fishy"; 
+  String type = "type"; 
   int fishHP = 100; 
   int fishMP = 20;
   int fishStr = 10;
@@ -41,17 +44,16 @@ class Fish {
   }
 
   // Add width/height
-  Fish(this.game, double x, double y, double w, double h, String name, int id) {
-    fishName = name; 
-    fishId = id;
+  Fish(this.game, double x, double y) {
     setTargetLocation();
-    fishRect = Rect.fromLTWH(x, y, w, h);
+    fishRect = Rect.fromLTWH(x, y, 20, 20);
+    fishName = randomName.randomizeName();
   }
 
   void setTargetLocation() {
-    double yAxisRng = game.rnd.nextDouble(); 
+    double yAxisRng = game.rng.nextDouble(); 
     if (yAxisRng < .03) { yAxisRng += .03; }
-    double x = game.rnd.nextDouble() * (game.screenSize.width - (game.tileSize));
+    double x = game.rng.nextDouble() * (game.screenSize.width - (game.tileSize));
     double y = yAxisRng * (game.screenSize.height - (game.tileSize));
     targetLocation = Offset(x, y);
   }
@@ -68,6 +70,7 @@ class Fish {
     }
   }
 
+  // This is bunk, make it better
   void update(double t) {
     // home animation
     if (fishLocation == FishLocation.home) {
@@ -94,6 +97,10 @@ class Fish {
           setFeedTargetLocation(); 
         }
       }
+      // Future.delayed(const Duration(milliseconds: 1000), () {
+      //   // Arrange animations better
+      // });
+
        
     } else if (fishLocation == FishLocation.battle) {
       double stepDistance = fishSpeed * t * 15;

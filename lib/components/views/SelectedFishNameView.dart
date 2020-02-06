@@ -14,7 +14,7 @@ class SelectedFishNameView extends StatelessWidget {
       left: 5,
       top: 25,
       child: Text(
-          fishName,
+          fishName != null ? fishName:'My Fishy',
           textAlign: TextAlign.left,
           style: TextStyle(
             fontSize: 20,

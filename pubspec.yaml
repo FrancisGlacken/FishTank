@@ -19,16 +19,27 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  intl: ^0.16.1
+
+  hive: ^1.3.0
+  hive_flutter: ^0.3.0+1
+
+  enum_to_string: ^1.0.8
+
+  # For OS-specific directory paths
+  path_provider: ^1.3.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
   flame: ^0.14.2
-  shared_preferences: ^0.5.2
+  
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  hive_generator: ^0.7.0
+  build_runner:
 
 
 # For information on the generic Dart part of this file, see the
@@ -57,6 +68,7 @@ flutter:
   - assets/images/background-fish-tank-3.png
   - assets/images/background-fish-tank-4.png
   - assets/images/background-fish-tank-5.png
+  - assets/images/background-fish-tank-6.png
   - assets/images/bubble.png
   - assets/images/fish-sprite-1-L.png
   - assets/images/fish-sprite-1-R.png
@@ -82,6 +94,8 @@ flutter:
   - assets/images/sprite-fish-jelly-2.png
   - assets/images/sprite-fish-jelly-3.png
   - assets/images/sprite-fish-jelly-4.png
+  - assets/images/ui-button-shop.png
+  - assets/images/ui-button-feed.png
   - assets/images/ui-button-fight.png
   - assets/images/ui-button-eat.png
   - assets/images/ui-button-flee.png

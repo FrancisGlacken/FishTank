@@ -14,7 +14,7 @@ class EnemyNameView extends StatelessWidget {
       right: 5,
       top: 25,
       child: Text(
-        enemyFishName,
+        enemyFishName != null ? enemyFishName: 'Evil Fishy',
         textAlign: TextAlign.left,
         style: TextStyle(
           fontSize: 20,

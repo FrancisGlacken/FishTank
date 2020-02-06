@@ -1,22 +1,22 @@
 import 'package:flutter/widgets.dart';
-import 'package:fish_tank/fish_tank_game.dart';
+import 'package:hive/hive.dart';
 
 class GoldView extends StatelessWidget {
-  const GoldView({
+  GoldView({
     Key key,
-    @required this.game,
   }) : super(key: key);
 
-  final FishTankGame game;
+  final box = Hive.box<int>("gold_box");
 
   @override
   Widget build(BuildContext context) {
     return Center(
-        child: Text(game.gold.toString(),
-            textAlign: TextAlign.left,
-            style: TextStyle(
-              fontSize: 20,
-              color: Color(0xffffffff),
-            )));
+          child: Text(box.get("gold").toString(),
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                fontSize: 20,
+                color: Color(0xffffffff),
+              ))
+    );
   }
 }
